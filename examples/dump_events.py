@@ -8,10 +8,10 @@
 from pymysqlreplication import BinLogStreamReader
 
 MYSQL_SETTINGS = {
-    "host": "127.0.0.1",
+    "host": "192.168.1.113",
     "port": 3306,
-    "user": "root",
-    "passwd": ""
+    "user": "floriation",
+    "passwd": "floriation"
 }
 
 

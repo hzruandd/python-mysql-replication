@@ -140,7 +140,9 @@ class BinLogStreamReader(object):
             if self.log_file is None or self.log_pos is None:
                 cur = self._stream_connection.cursor()
                 cur.execute("SHOW MASTER STATUS")
-                self.log_file, self.log_pos = cur.fetchone()[:2]
+                data = cur.fetchone()
+                if data:
+                    self.log_file, self.log_pos = data[:2]
                 cur.close()
 
             prelude = struct.pack('<i', len(self.log_file) + 11) \

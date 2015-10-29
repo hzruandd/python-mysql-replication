@@ -16,10 +16,10 @@ from pymysqlreplication.row_event import (
 )
 
 MYSQL_SETTINGS = {
-    "host": "127.0.0.1",
+    "host": "192.168.1.113",
     "port": 3306,
-    "user": "root",
-    "passwd": ""
+    "user": "floriation",
+    "passwd": "floriation"
 }
 
 
@@ -28,12 +28,16 @@ def main():
 
     stream = BinLogStreamReader(
         connection_settings=MYSQL_SETTINGS,
-        only_events=[DeleteRowsEvent, WriteRowsEvent, UpdateRowsEvent])
+        server_id=3,
+        only_events=[DeleteRowsEvent, WriteRowsEvent, UpdateRowsEvent], blocking=True)
 
     for binlogevent in stream:
         prefix = "%s:%s:" % (binlogevent.schema, binlogevent.table)
 
         for row in binlogevent.rows:
+            print row["values"]
+            if "li" in row["values"]["data"]:
+                print row["values"]
             if isinstance(binlogevent, DeleteRowsEvent):
                 vals = row["values"]
                 r.delete(prefix + str(vals["id"]))
