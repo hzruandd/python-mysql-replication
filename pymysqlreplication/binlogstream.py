@@ -140,10 +140,13 @@ class BinLogStreamReader(object):
             if self.log_file is None or self.log_pos is None:
                 cur = self._stream_connection.cursor()
                 cur.execute("SHOW MASTER STATUS")
+                #NOTE(hzruandd): deal with the NoneType error when the cursor
+                # fetch nothing.
                 data = cur.fetchone()
                 if data:
                     self.log_file, self.log_pos = data[:2]
                 cur.close()
+                return
 
             prelude = struct.pack('<i', len(self.log_file) + 11) \
                 + int2byte(COM_BINLOG_DUMP)
